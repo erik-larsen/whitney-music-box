@@ -92,5 +92,6 @@ then open <http://localhost:8137/>.
 The Whitney Music Box and its soundtracks are the work of Jim Bumgardner.
 His related example code is published under CC BY-NC-SA 3.0
 ([Whitney-Music-Box-Examples](https://github.com/jbum/Whitney-Music-Box-Examples)).
-This port inherits that spirit: non-commercial, with attribution — if you
+This port inherits that spirit: the repo is offered under
+[CC BY-NC-SA 4.0](LICENSE) — non-commercial, with attribution — if you
 reuse it, credit Jim Bumgardner and John Whitney.
