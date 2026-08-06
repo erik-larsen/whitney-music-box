@@ -1,4 +1,4 @@
-# Whitney Music Box — HTML5 resurrection
+# Whitney Music Box — [HTML5 resurrection](https://erik-larsen.github.io/whitney-music-box/)
 
 A faithful web port of the 21 Flash variations that lived at
 [whitneymusicbox.org](https://whitneymusicbox.org) from 2006 until Flash died.
@@ -84,14 +84,6 @@ python -m http.server 8137
 ```
 
 then open <http://localhost:8137/>.
-
-## Deploying to GitHub Pages
-
-1. Create a repository and put the contents of this folder at its root
-   (or in a `docs/` folder).
-2. Settings → Pages → Source: deploy from branch, select the branch and
-   `/ (root)` (or `/docs`).
-3. The site is fully static — no build step.
 
 ## Licensing
 
