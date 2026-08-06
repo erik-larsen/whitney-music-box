@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>whitney music box</title>
+<meta name="description" content="Whitney Music Box — a faithful web resurrection of Jim Bumgardner's 2006 Flash original, after ideas from John Whitney's Digital Harmony.">
+<style>
+  html, body {
+    margin: 0; padding: 0;
+    background: #000; color: #ccc;
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 13px;
+    text-align: center;
+  }
+  h1 {
+    font-size: 16px; font-weight: normal;
+    color: #fff; margin: 18px 0 12px;
+  }
+  #stagewrap {
+    position: relative;
+    width: min(500px, 96vw);
+    aspect-ratio: 1;
+    margin: 0 auto;
+  }
+  #stage {
+    width: 100%; height: 100%;
+    display: block;
+    background: #000;
+  }
+  #controls {
+    margin: 12px auto 0;
+  }
+  #playpause {
+    background: #1a1a1a; color: #ddd;
+    border: 1px solid #555; border-radius: 18px;
+    font-size: 14px; line-height: 1;
+    padding: 8px 26px;
+    cursor: pointer;
+  }
+  #playpause:hover { color: #fff; border-color: #999; }
+  #nav {
+    max-width: 560px;
+    margin: 24px auto 8px;
+    line-height: 1.9;
+  }
+  #nav a {
+    display: block;
+    color: #7ab0d4; text-decoration: none;
+  }
+  #nav a:hover { color: #fff; text-decoration: underline; }
+  #nav a.active { color: #fff; }
+  footer {
+    margin: 28px auto 40px;
+    max-width: 560px;
+    color: #777;
+    line-height: 1.6;
+  }
+  footer a { color: #999; }
+</style>
+</head>
+<body>
+<h1 id="title">whitney music box</h1>
+
+<div id="stagewrap">
+  <canvas id="stage" width="500" height="500"></canvas>
+</div>
+
+<div id="controls">
+  <button id="playpause" title="play / pause">▶</button>
+</div>
+
+<div id="nav"></div>
+
+<footer>
+  A musical realization of the motion graphics of John Whitney Sr. as described
+  in his book <i>Digital Harmony</i>.<br>
+  Original animation &amp; music by
+  <a href="https://krazydad.com">Jim Bumgardner</a> (2006) —
+  <a href="https://whitneymusicbox.org">whitneymusicbox.org</a>.<br>
+  This is a faithful HTML5 resurrection of the original Flash variations,
+  playing the original soundtracks.<br>
+  <a href="compare.html">side-by-side with the original SWFs</a>
+</footer>
+
+<script src="js/whitney.js"></script>
+</body>
+</html>

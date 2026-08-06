@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>whitney music box — port vs. original</title>
+<style>
+  body { background:#000; color:#ccc; font-family: Verdana, sans-serif; font-size: 13px; text-align:center; }
+  h1 { font-size: 15px; font-weight: normal; color:#fff; }
+  .row { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+  .cell { width: 500px; }
+  .cell h2 { font-size: 13px; font-weight: normal; color:#999; }
+  iframe { border: 1px solid #333; }
+  select { background:#222; color:#eee; border:1px solid #555; padding:4px; }
+  #orig { width:500px; height:500px; }
+</style>
+</head>
+<body>
+<h1>side-by-side: HTML5 port (left) vs. original SWF in Ruffle (right)</h1>
+<p>
+  <select id="pick"></select>
+</p>
+<div class="row">
+  <div class="cell"><h2>port</h2><iframe id="port" width="500" height="620" frameborder="0"></iframe></div>
+  <div class="cell"><h2>original (Ruffle)</h2><div id="orig"></div></div>
+</div>
+<script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
+<script>
+const SWFS = [
+  [0,'whitneyChromatic'],[1,'whitneyHarmonic'],[2,'whitneyHarmonicLow'],
+  [3,'whitneyHarmonicRev48'],[4,'whitneyPalindrome'],[5,'whitney88'],
+  [6,'whitneyMTones'],[7,'whitney120'],[8,'whitney88b3'],[9,'whitney88bars'],
+  [10,'whitney64Calliope'],[11,'whitneyMinute'],[12,'whitneyPrimes'],
+  [13,'whitneyNonPrimes'],[14,'whitneyStereo'],[15,'whitneyStereo120'],
+  [16,'whitneyStereo210'],[17,'whitneyCrank'],[18,'whitneyStereoSweep'],
+  [19,'whitneySonar'],[20,'whitneyCarol']];
+const pick = document.getElementById('pick');
+for (const [v, name] of SWFS) {
+  const o = document.createElement('option');
+  o.value = v; o.textContent = `var. ${v} — ${name}`;
+  pick.appendChild(o);
+}
+function load(v) {
+  document.getElementById('port').src = `index.html?v=${v}`;
+  const holder = document.getElementById('orig');
+  holder.innerHTML = '';
+  const ruffle = window.RufflePlayer.newest();
+  const player = ruffle.createPlayer();
+  player.style.width = '500px'; player.style.height = '500px';
+  holder.appendChild(player);
+  player.ruffle().load(`originals/${SWFS.find(s => s[0] == v)[1]}.swf?nocredit=1`);
+}
+pick.addEventListener('change', () => load(pick.value));
+load(0);
+</script>
+</body>
+</html>
