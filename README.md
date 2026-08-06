@@ -1,5 +1,7 @@
 # Whitney Music Box — [HTML5 resurrection](https://erik-larsen.github.io/whitney-music-box/)
 
+<p align="center"><img src="media/screenshot.png" width="400" alt="Whitney Music Box var. 0 — chromatic, 48 tines"></p>
+
 A faithful web port of the 21 Flash variations that lived at
 [whitneymusicbox.org](https://whitneymusicbox.org) from 2006 until Flash died.
 
