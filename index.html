@@ -44,12 +44,26 @@
     margin: 24px auto 8px;
     line-height: 1.9;
   }
+  #nav .navrow {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    max-width: 440px;
+    margin: 0 auto;
+  }
+  #nav .navtitle { color: #ccc; text-align: left; }
+  #nav .navpicks { white-space: nowrap; }
   #nav a {
-    display: block;
     color: #7ab0d4; text-decoration: none;
+    margin-left: 10px;
   }
   #nav a:hover { color: #fff; text-decoration: underline; }
-  #nav a.active { color: #fff; }
+  #nav a.active { color: #fff; font-weight: bold; }
+  #nav .navgroup {
+    margin-top: 14px;
+    color: #888;
+    font-style: italic;
+  }
   footer {
     margin: 28px auto 40px;
     max-width: 560px;

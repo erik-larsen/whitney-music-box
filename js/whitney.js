@@ -30,28 +30,167 @@ const NONPRIMES = [
   40,42,44,45,46,48,49,50,51,52,54,55,56,57,58,60,62,63,64,65,66,68,69,70,72,
   74,75,76,77,78,80,81,82,84,85,86,87,88,90,91,92,93,94,95,96,98,99,100,102];
 
+// Every original variation carries both its extracted soundtrack (audio) and a
+// live-synth counterpart (synth) — the page offers them side by side. Voices
+// and tunings are chosen to echo each variation's original character.
 const VARIATIONS = [
-  {v:0,  title:'chromatic - 48 tines',                    swf:'whitneyChromatic',   mode:'standard', n:48,  cycle:180, audio:{file:'whitneyChromatic.mp3',   samples:1984320, rate:11025, seek:1661}},
-  {v:1,  title:'harmonics of 55hz',                       swf:'whitneyHarmonic',    mode:'standard', n:48,  cycle:180, audio:{file:'whitneyHarmonic.mp3',    samples:1984500, rate:11025, seek:1661}},
-  {v:2,  title:'harmonics of 20hz',                       swf:'whitneyHarmonicLow', mode:'standard', n:48,  cycle:180, audio:{file:'whitneyHarmonicLow.mp3', samples:1984500, rate:11025, seek:1661}},
-  {v:3,  title:'harmonics of 48hz, reversed',             swf:'whitneyHarmonicRev48', mode:'standard', n:48, cycle:180, audio:{file:'whitneyHarmonicRev48.mp3', samples:1984500, rate:11025, seek:1661}},
-  {v:4,  title:'harmonics of 48hz, palindrome',           swf:'whitneyPalindrome',  mode:'standard', n:48,  cycle:180, audio:{file:'whitneyPalindrome.mp3',  samples:1984500, rate:11025, seek:1661}},
-  {v:5,  title:'chromatic - 88 tines',                    swf:'whitney88',          mode:'standard', n:88,  cycle:180, audio:{file:'whitney88.mp3',          samples:1984500, rate:11025, seek:1661}},
-  {v:6,  title:'microtones',                              swf:'whitneyMTones',      mode:'standard', n:48,  cycle:180, audio:{file:'whitneyMTones.mp3',      samples:1984500, rate:11025, seek:1661}},
-  {v:7,  title:'harmonics - 120 tines, reversed',         swf:'whitney120',         mode:'standard', n:120, cycle:180, audio:{file:'whitney120.mp3',         samples:1987200, rate:11025, seek:0}},
-  {v:8,  title:'chromatic - 88 organ pipes, rev.',        swf:'whitney88b3',        mode:'standard', n:88,  cycle:180, audio:{file:'whitney88b3.mp3',        samples:1967776, rate:11025, seek:1661}},
-  {v:9,  title:'chromatic - 88 bars, rev.',               swf:'whitney88bars',      mode:'standard', n:88,  cycle:180, audio:{file:'whitney88bars.mp3',      samples:1967586, rate:11025, seek:1661}},
-  {v:10, title:'chromatic - 64 pipe crypto calliope',     swf:'whitney64Calliope',  mode:'standard', n:64,  cycle:180, audio:{file:'whitney64Calliope.mp3',  samples:1961244, rate:11025, seek:1661}},
-  {v:11, title:'minute waltz - 60 keys, 60 seconds',      swf:'whitneyMinute',      mode:'standard', n:60,  cycle:60,  audio:{file:'whitneyMinute.mp3',      samples:661831,  rate:11025, seek:1661}},
-  {v:12, title:'chromatic - prime numbers only',          swf:'whitneyPrimes',      mode:'table',    n:48,  cycle:180, table:PRIMES,    audio:{file:'whitneyPrimes.mp3',    samples:1984320, rate:11025, seek:1661}},
-  {v:13, title:'chromatic - non-primes only',             swf:'whitneyNonPrimes',   mode:'table',    n:48,  cycle:180, table:NONPRIMES, audio:{file:'whitneyNonPrimes.mp3', samples:1984320, rate:11025, seek:1661}},
-  {v:14, title:'stereo',                                  swf:'whitneyStereo',      mode:'stereo',   n:48,  cycle:180, audio:{file:'whitneyStereo.mp3',      samples:1984500, rate:11025, seek:1670}},
-  {v:15, title:'stereo - 120',                            swf:'whitneyStereo120',   mode:'stereo',   n:120, cycle:180, audio:{file:'whitneyStereo120.mp3',   samples:1984500, rate:11025, seek:1670}},
-  {v:16, title:'stereo - 210',                            swf:'whitneyStereo210',   mode:'stereo',   n:210, cycle:180, audio:{file:'whitneyStereo210.mp3',   samples:1984500, rate:11025, seek:1670}},
-  {v:17, title:'hand cranked',                            swf:'whitneyCrank',       mode:'crank',    n:25,  cycle:60},
-  {v:18, title:'stereo drone (new)',                      swf:'whitneyStereoSweep', mode:'sweep',    n:50,  cycle:180, audio:{file:'whitneyStereoSweep.mp3', samples:1984500, rate:11025, seek:1670}},
-  {v:19, title:'stereo sonar (new)',                      swf:'whitneySonar',       mode:'sonar',    n:48,  cycle:180, audio:{file:'whitneySonar.mp3',       samples:1984500, rate:11025, seek:1670}},
-  {v:20, title:'bell carol (new)',                        swf:'whitneyCarol',       mode:'standard', n:48,  cycle:180, audio:{file:'whitneyCarol.mp3',       samples:3969000, rate:22050, seek:1681}},
+  {v:0,  title:'chromatic - 48 tines',                    swf:'whitneyChromatic',   mode:'standard', n:48,  cycle:180, audio:{file:'whitneyChromatic.mp3',   samples:1984320, rate:11025, seek:1661},
+   synth:{voice:'pluck', tuning:{type:'chromatic', base:36}}},
+  {v:1,  title:'harmonics of 55hz',                       swf:'whitneyHarmonic',    mode:'standard', n:48,  cycle:180, audio:{file:'whitneyHarmonic.mp3',    samples:1984500, rate:11025, seek:1661},
+   synth:{voice:'pure', tuning:{type:'harmonics', f0:55}}},
+  {v:2,  title:'harmonics of 20hz',                       swf:'whitneyHarmonicLow', mode:'standard', n:48,  cycle:180, audio:{file:'whitneyHarmonicLow.mp3', samples:1984500, rate:11025, seek:1661},
+   synth:{voice:'pure', tuning:{type:'harmonics', f0:20}}},
+  {v:3,  title:'harmonics of 48hz, reversed',             swf:'whitneyHarmonicRev48', mode:'standard', n:48, cycle:180, audio:{file:'whitneyHarmonicRev48.mp3', samples:1984500, rate:11025, seek:1661},
+   synth:{voice:'pure', tuning:{type:'harmonics', f0:48, reverse:true}}},
+  {v:4,  title:'harmonics of 48hz, palindrome',           swf:'whitneyPalindrome',  mode:'standard', n:48,  cycle:180, audio:{file:'whitneyPalindrome.mp3',  samples:1984500, rate:11025, seek:1661},
+   synth:{voice:'pure', tuning:{type:'harmonics', f0:48, palindrome:true}}},
+  {v:5,  title:'chromatic - 88 tines',                    swf:'whitney88',          mode:'standard', n:88,  cycle:180, audio:{file:'whitney88.mp3',          samples:1984500, rate:11025, seek:1661},
+   synth:{voice:'pluck', tuning:{type:'chromatic', base:21}}},
+  {v:6,  title:'microtones',                              swf:'whitneyMTones',      mode:'standard', n:48,  cycle:180, audio:{file:'whitneyMTones.mp3',      samples:1984500, rate:11025, seek:1661},
+   synth:{voice:'pure', tuning:{type:'microtones', fLow:220, octaves:2}}},
+  {v:7,  title:'harmonics - 120 tines, reversed',         swf:'whitney120',         mode:'standard', n:120, cycle:180, audio:{file:'whitney120.mp3',         samples:1987200, rate:11025, seek:0},
+   synth:{voice:'pure', tuning:{type:'harmonics', f0:16, reverse:true}}},
+  {v:8,  title:'chromatic - 88 organ pipes, rev.',        swf:'whitney88b3',        mode:'standard', n:88,  cycle:180, audio:{file:'whitney88b3.mp3',        samples:1967776, rate:11025, seek:1661},
+   synth:{voice:'organ', tuning:{type:'chromatic', base:21, reverse:true}}},
+  {v:9,  title:'chromatic - 88 bars, rev.',               swf:'whitney88bars',      mode:'standard', n:88,  cycle:180, audio:{file:'whitney88bars.mp3',      samples:1967586, rate:11025, seek:1661},
+   synth:{voice:'bell', tuning:{type:'chromatic', base:21, reverse:true}}},
+  {v:10, title:'chromatic - 64 pipe crypto calliope',     swf:'whitney64Calliope',  mode:'standard', n:64,  cycle:180, audio:{file:'whitney64Calliope.mp3',  samples:1961244, rate:11025, seek:1661},
+   synth:{voice:'organ', tuning:{type:'chromatic', base:36}}},
+  {v:11, title:'minute waltz - 60 keys, 60 seconds',      swf:'whitneyMinute',      mode:'standard', n:60,  cycle:60,  audio:{file:'whitneyMinute.mp3',      samples:661831,  rate:11025, seek:1661},
+   synth:{voice:'pluck', tuning:{type:'chromatic', base:24}}},
+  {v:12, title:'chromatic - prime numbers only',          swf:'whitneyPrimes',      mode:'table',    n:48,  cycle:180, table:PRIMES,    audio:{file:'whitneyPrimes.mp3',    samples:1984320, rate:11025, seek:1661},
+   synth:{voice:'pluck', tuning:{type:'chromatic', base:36}}},
+  {v:13, title:'chromatic - non-primes only',             swf:'whitneyNonPrimes',   mode:'table',    n:48,  cycle:180, table:NONPRIMES, audio:{file:'whitneyNonPrimes.mp3', samples:1984320, rate:11025, seek:1661},
+   synth:{voice:'pluck', tuning:{type:'chromatic', base:36}}},
+  {v:14, title:'stereo',                                  swf:'whitneyStereo',      mode:'stereo',   n:48,  cycle:180, audio:{file:'whitneyStereo.mp3',      samples:1984500, rate:11025, seek:1670},
+   synth:{voice:'pluck', tuning:{type:'chromatic', base:36}}},
+  {v:15, title:'stereo - 120',                            swf:'whitneyStereo120',   mode:'stereo',   n:120, cycle:180, audio:{file:'whitneyStereo120.mp3',   samples:1984500, rate:11025, seek:1670},
+   synth:{voice:'pure', tuning:{type:'harmonics', f0:16}}},
+  {v:16, title:'stereo - 210',                            swf:'whitneyStereo210',   mode:'stereo',   n:210, cycle:180, audio:{file:'whitneyStereo210.mp3',   samples:1984500, rate:11025, seek:1670},
+   synth:{voice:'pure', tuning:{type:'harmonics', f0:8}}},
+  // The crank never had a soundtrack — it triggers its 25 embedded reed
+  // samples interactively. Its "synth" twin swaps those for a synthesized
+  // reed voice; same tuning (reed_60..84 = midi 60..84, lowest inside).
+  {v:17, title:'hand cranked',                            swf:'whitneyCrank',       mode:'crank',    n:25,  cycle:60,
+   synth:{voice:'reedsynth', tuning:{type:'chromatic', base:60, reverse:true}}},
+  {v:18, title:'stereo drone (new)',                      swf:'whitneyStereoSweep', mode:'sweep',    n:50,  cycle:180, audio:{file:'whitneyStereoSweep.mp3', samples:1984500, rate:11025, seek:1670},
+   synth:{voice:'pad', tuning:{type:'harmonics', f0:55}}},
+  {v:19, title:'stereo sonar (new)',                      swf:'whitneySonar',       mode:'sonar',    n:48,  cycle:180, audio:{file:'whitneySonar.mp3',       samples:1984500, rate:11025, seek:1670},
+   synth:{voice:'pure', tuning:{type:'chromatic', base:45}}},
+  {v:20, title:'bell carol (new)',                        swf:'whitneyCarol',       mode:'standard', n:48,  cycle:180, audio:{file:'whitneyCarol.mp3',       samples:3969000, rate:22050, seek:1681},
+   synth:{voice:'bell', tuning:{type:'chromatic', base:48}}},
+
+  // --- new variations: synth-only, no 2006 counterpart ----------------------
+  {v:21, group:'new variations — synth only', title:'bells - pentatonic - 25 tines', mode:'standard', n:25, cycle:120,
+   synth:{voice:'bell', tuning:{type:'pentatonic', base:48}}},
+  {v:22, group:'new variations — synth only', title:'reed organ - 25 tines', mode:'standard', n:25, cycle:60,
+   synth:{voice:'reed', tuning:{type:'chromatic', base:60}}},
+
+  // --- Digital Harmony reconstructions: Paul Rother's programs from the
+  // appendix of John Whitney's book (1980), via Jim Bumgardner's Processing
+  // transcriptions, given the music-box treatment (the book versions were
+  // visuals-only). spec.plugin supplies the drawing and note events; spec.n
+  // is the number of VOICES (columnBC/arabesque voice a subset of the dots).
+  // Visual treatment matches the classic variations: a gray hairline where
+  // notes strike, and each voiced dot brightens for its note's duration.
+  {v:23, group:'digital harmony (1980) — the book\'s programs, music-boxed', title:'column A - 60 falling columns', mode:'plugin', n:59, cycle:90,
+   synth:{voice:'pluck', tuning:{type:'chromatic', base:28, reverse:true}},
+   plugin:{
+     fade:'classic',   // or 'noteDur': dot glows for its note's audible length
+     draw(p, dc) {
+       const cycle = p.spec.cycle, step = p.elapsed / cycle;
+       const x0 = 50, w = 400, y0 = 50, h = 400;
+       // strike line: dots sound as they wrap back to the top
+       dc.strokeStyle = '#555555'; dc.lineWidth = 1;
+       dc.beginPath();
+       dc.moveTo(x0 - 8, y0 + 0.5); dc.lineTo(x0 + w + 8, y0 + 0.5);
+       dc.stroke();
+       for (let i = 0; i < 60; i++) {
+         const x = x0 + w * i / 60;
+         const y = y0 + ((h * i * step) % h);
+         const b = i > 0 ? p.dhBrightness((i * step) % 1, cycle / i, i - 1) : 0;
+         // classic speed scale: fastest = getColor(0), 2px; slower = bigger
+         const u = (59 - i) / 60;
+         dc.fillStyle = lerpWhite(getColor(u), b);
+         dc.beginPath();
+         dc.arc(x, y, Math.max(2, u * 8) + 2 * b, 0, 2 * Math.PI);
+         dc.fill();
+       }
+     },
+     // voice j = column j+1, which wraps j+1 times per cycle
+     events(p, j) {
+       return {period: p.spec.cycle / (j + 1), offsets: [{frac: 0, pan: null}], k0: 1};
+     },
+   }},
+  {v:24, group:'digital harmony (1980) — the book\'s programs, music-boxed', title:'column BC - the music box\'s ancestor', mode:'plugin', n:359, cycle:540,
+   // ALL 359 dots voiced. Unlike the first all-voiced attempt (freq = speed
+   // x 16 Hz, which pushed fast voices into tapered-to-silence treble), all
+   // voices sit in a strong audible band: microtones across 165-930 Hz.
+   // Short, present pings — at ~120 notes/s they fuse into a granular
+   // stream, so congruence is "flash activity = sound activity".
+   synth:{voice:'pure', tuning:{type:'microtones', fLow:165, octaves:2.5, reverse:true}, velScale:0.6, durScale:0.35},
+   plugin:{
+     fade:'classic',   // or 'noteDur': dot glows for its note's audible length
+     draw(p, dc) {
+       const cycle = p.spec.cycle, step = p.elapsed / cycle;
+       const cx = 250, cy = 250, R = 225;
+       // strike line: center to 3 o'clock, like the music box
+       dc.strokeStyle = '#555555'; dc.lineWidth = 1;
+       dc.beginPath();
+       dc.moveTo(cx, cy + 0.5); dc.lineTo(cx + R + 10, cy + 0.5);
+       dc.stroke();
+       for (let i = 0; i < 360; i++) {
+         const a = 2 * Math.PI * step * i;
+         const rad = (i / 360) * R;
+         const b = i > 0 ? p.dhBrightness((step * i) % 1, cycle / i, i - 1) : 0;
+         const u = (359 - i) / 360;
+         dc.fillStyle = lerpWhite(getColor(u), b);
+         dc.beginPath();
+         dc.arc(cx + Math.cos(a) * rad, cy - Math.sin(a) * rad,
+                Math.max(2, u * 8) + 2 * b, 0, 2 * Math.PI);
+         dc.fill();
+       }
+     },
+     // voice j = dot j+1, crossing the line j+1 times per cycle; k0=0 opens
+     // with the grand-alignment chord like the classic variations
+     events(p, j) {
+       return {period: p.spec.cycle / (j + 1), offsets: [{frac: 0, pan: null}], k0: 0};
+     },
+   }},
+  {v:25, group:'digital harmony (1980) — the book\'s programs, music-boxed', title:'arabesque', mode:'plugin', n:359, cycle:720,
+   // every dot voiced: ~1-cent microtonal steps, quiet short plucks
+   synth:{voice:'pluck', tuning:{type:'microtones', fLow:220, octaves:3, reverse:true}, velScale:0.3, durScale:0.5},
+   plugin:{
+     fade:'classic',   // or 'noteDur': dot glows for its note's audible length
+     draw(p, dc) {
+       const cycle = p.spec.cycle, step = p.elapsed / cycle;
+       const cy = 250, R = 220, r3 = R * 3, xw = 20;
+       // strike line: the wrap boundary, where dots re-enter from the left
+       dc.strokeStyle = '#555555'; dc.lineWidth = 1;
+       dc.beginPath();
+       dc.moveTo(xw + 0.5, cy - R - 8); dc.lineTo(xw + 0.5, cy + R + 8);
+       dc.stroke();
+       for (let i = 0; i < 360; i++) {
+         const ratio = i / 360;
+         const a = (-90 + 360 * ratio) * DEG;
+         const x = Math.cos(a) * ratio + i * step * r3;
+         const ix = xw + (((x % r3) + r3) % r3);
+         const iy = cy + Math.sin(a) * R;
+         if (ix > 504) continue;
+         const b = i > 0 ? p.dhBrightness(((x / r3) % 1 + 1) % 1, cycle / i, i - 1) : 0;
+         const u = (359 - i) / 360;
+         dc.fillStyle = lerpWhite(getColor(u), b);
+         dc.beginPath();
+         dc.arc(ix, iy, Math.max(2, u * 8) + 2 * b, 0, 2 * Math.PI);
+         dc.fill();
+       }
+     },
+     // voice j = dot j+1; its x wraps each time i*step passes an integer;
+     // k0=0 opens with the grand-alignment chord like the classic variations
+     events(p, j) {
+       return {period: p.spec.cycle / (j + 1), offsets: [{frac: 0, pan: null}], k0: 0};
+     },
+   }},
 ];
 
 // ---------------------------------------------------------------------------
@@ -74,6 +213,13 @@ function cssColor(rgb, alpha) {
 }
 
 const DEG = Math.PI / 180;
+
+// Blend a packed-int color toward white (t = 0 none, 1 full white).
+// Used by the Digital Harmony plugins for the "note ringing" treatment.
+function lerpWhite(rgb, t) {
+  const r = (rgb >> 16) & 0xFF, g = (rgb >> 8) & 0xFF, b = rgb & 0xFF;
+  return `rgb(${Math.round(r + (255 - r) * t)},${Math.round(g + (255 - g) * t)},${Math.round(b + (255 - b) * t)})`;
+}
 
 // ---------------------------------------------------------------------------
 // Player
@@ -149,7 +295,25 @@ class WhitneyPlayer {
     this.gain = this.ctxAudio.createGain();
     this.gain.connect(this.ctxAudio.destination);
 
-    if (this.spec.audio) {
+    if (this.spec.synth) {
+      // Master chain for generated notes: gain -> compressor -> destination.
+      // The compressor tames the grand-alignment chord (all tines at t=0).
+      const comp = this.ctxAudio.createDynamicsCompressor();
+      comp.threshold.value = -18;
+      comp.knee.value = 12;
+      comp.ratio.value = 4;
+      this.gain.disconnect();
+      this.gain.connect(comp);
+      // Master level AFTER the compressor — the compressor's 4:1 ratio and
+      // auto makeup gain largely cancel pre-compressor level changes, so
+      // overall variation loudness must be set here (spec.synth.master).
+      const master = this.ctxAudio.createGain();
+      master.gain.value = this.spec.synth.master || 1;
+      comp.connect(master);
+      master.connect(this.ctxAudio.destination);
+      this.gain.gain.value = 0.6;
+      if (this.spec.synth.voice === 'reed') await this.loadReeds();
+    } else if (this.spec.audio) {
       const resp = await fetch('audio/' + this.spec.audio.file);
       const data = await resp.arrayBuffer();
       this.buffer = await this.ctxAudio.decodeAudioData(data);
@@ -191,19 +355,305 @@ class WhitneyPlayer {
   }
 
   playCrankNote(i) {
+    // pan = -50 + floor(i*100/(n-1)), Flash setPan units (-100..100)
+    const pan = (-50 + Math.floor(i * 100 / (this.spec.n - 1))) / 100;
+    if (this.spec.synth) {
+      this.playSynthNote(i, this.ctxAudio.currentTime, pan);
+      return;
+    }
     if (!this.crankSounds || !this.crankSounds[i]) return;
     const src = this.ctxAudio.createBufferSource();
     src.buffer = this.crankSounds[i];
-    // pan = -50 + floor(i*100/(n-1)), Flash setPan units (-100..100)
-    const pan = -50 + Math.floor(i * 100 / (this.spec.n - 1));
     if (this.ctxAudio.createStereoPanner) {
       const p = this.ctxAudio.createStereoPanner();
-      p.pan.value = pan / 100;
+      p.pan.value = pan;
       src.connect(p); p.connect(this.gain);
     } else {
       src.connect(this.gain);
     }
     src.start();
+  }
+
+  // ---- live synth -----------------------------------------------------------
+
+  async loadReeds() {
+    // Reed samples extracted from whitneyCrank.swf: reed_60..reed_84 (midi 60-84)
+    this.reedBuffers = {};
+    const loads = [];
+    for (let midi = 60; midi <= 84; midi++) {
+      loads.push(fetch(`audio/whitneyCrank_reed_${midi}.mp3`)
+        .then(r => r.arrayBuffer())
+        .then(d => this.ctxAudio.decodeAudioData(d))
+        .then(buf => { this.reedBuffers[midi] = buf; }));
+    }
+    await Promise.all(loads);
+  }
+
+  // Pitch for tine j (0 = innermost/fastest). By default the innermost tine is
+  // highest, matching the originals; tuning.reverse flips that ("reversed"
+  // variations), tuning.palindrome folds the range (up then back down).
+  tineFreq(j) {
+    const n = this.spec.n;
+    const t = this.spec.synth.tuning;
+    let idx = t.reverse ? j : n - 1 - j;    // pitch rank, 0 = lowest
+    if (t.palindrome) {
+      const s = idx + 1;
+      idx = (s <= n / 2 ? s : n + 1 - s) - 1;
+    }
+    if (t.type === 'harmonics') return t.f0 * (idx + 1);
+    if (t.type === 'microtones') {
+      return t.fLow * Math.pow(2, t.octaves * idx / (n - 1));
+    }
+    let midi;
+    if (t.type === 'pentatonic') {
+      const deg = [0, 2, 4, 7, 9];
+      midi = t.base + 12 * Math.floor(idx / 5) + deg[idx % 5];
+    } else {                                // chromatic
+      midi = t.base + idx;
+    }
+    return 440 * Math.pow(2, (midi - 69) / 12);
+  }
+
+  // Trigger pattern for tine j, derived from the variation's visual mode:
+  //  standard/table: one note per revolution, at the zero-line crossing
+  //  stereo: both crossings (0° right / 180° left), hard-panned
+  //  sweep: the two side crossings (dots start at 12 o'clock), panned swells
+  //  sonar: when the dot meets the counter-rotating sweep line (rate n+1-j)
+  tineEvents(j) {
+    const spec = this.spec, n = spec.n;
+    if (spec.plugin && spec.plugin.events) return spec.plugin.events(this, j);
+    let revsPerCycle = n - j;
+    let k0 = 0;
+    let offsets = [{frac: 0, pan: null}];
+    if (spec.mode === 'table') revsPerCycle = spec.table[n - 1 - j];
+    else if (spec.mode === 'sonar') { revsPerCycle = n + 1 - j; k0 = 1; }
+    else if (spec.mode === 'stereo') offsets = [{frac: 0, pan: 0.8}, {frac: 0.5, pan: -0.8}];
+    else if (spec.mode === 'sweep') offsets = [{frac: 0.25, pan: 0.7}, {frac: 0.75, pan: -0.7}];
+    return {period: spec.cycle / revsPerCycle, offsets, k0};
+  }
+
+  // Schedule all notes falling inside the lookahead window.
+  scheduleSynth() {
+    const spec = this.spec, n = spec.n;
+    // Lookahead long enough to ride out background-tab timer throttling
+    // (interval clamps to ~1s when the tab is hidden; audio keeps playing).
+    const horizon = this.ctxAudio.currentTime + 3.0;
+    for (let j = 0; j < n; j++) {
+      const ev = this.tineEvents(j);
+      const per = ev.offsets.length;
+      let k = this.schedK[j];
+      for (;;) {
+        const off = ev.offsets[k % per];
+        const t = this.audioStartTime +
+          (Math.floor(k / per) + off.frac + ev.k0) * ev.period;
+        if (t >= horizon) break;
+        this.playSynthNote(j, t, off.pan);
+        k++;
+      }
+      this.schedK[j] = k;
+    }
+  }
+
+  playSynthNote(j, when, panOverride) {
+    const ctx = this.ctxAudio, n = this.spec.n;
+    const freq = this.tineFreq(j);
+    if (!isFinite(freq) || freq < 16 || freq > 9000) return;  // audible range only
+    // 0 = fastest voice, 1 = slowest (slow notes ring louder and longer).
+    // Standard modes: j=0 is the innermost/fastest tine. Plugin variations
+    // order voices slowest-first, so invert.
+    let outer = n > 1 ? j / (n - 1) : 0;
+    if (this.spec.mode === 'plugin') outer = 1 - outer;
+    // Outer (slow, low) notes are louder and ring longer, like the originals.
+    // Dense variations (many tines / table speeds) are scaled down to keep
+    // the mix and the CPU sane.
+    let vel = (0.25 + 0.55 * outer) * Math.min(1, Math.sqrt(60 / n));
+    if (this.spec.mode === 'table') vel *= 0.6;
+    if (this.spec.synth.velScale) vel *= this.spec.synth.velScale;
+    const env = ctx.createGain();
+    env.gain.value = 0;
+    let out = env;
+    if (ctx.createStereoPanner) {
+      const p = ctx.createStereoPanner();
+      p.pan.value = panOverride !== null && panOverride !== undefined
+        ? panOverride
+        : -0.3 + 0.6 * outer;
+      env.connect(p);
+      out = p;
+    }
+    out.connect(this.gain);
+    const voice = this.spec.synth.voice;
+    const dur = this.noteDur(j);
+    if (voice === 'reed') this.voiceReed(env, freq, when, vel);
+    else if (voice === 'reedsynth') this.voiceReedSynth(env, freq, when, vel + 0.3, dur);
+    else if (voice === 'pure') this.voicePure(env, freq, when, vel, dur);
+    else if (voice === 'bell') this.voiceBell(env, freq, when, vel, dur);
+    else if (voice === 'organ') this.voiceOrgan(env, freq, when, vel, dur);
+    else if (voice === 'pad') this.voicePad(env, freq, when, vel, this.tineEvents(j).period);
+    else this.voicePluck(env, freq, when, vel, dur);
+  }
+
+  // Audible length of voice j's note — also used by plugin visuals so a dot
+  // stays bright for exactly as long as its note rings (noteDur fade mode).
+  noteDur(j) {
+    const n = this.spec.n;
+    let outer = n > 1 ? j / (n - 1) : 0;
+    if (this.spec.mode === 'plugin') outer = 1 - outer;
+    let dur;
+    switch (this.spec.synth.voice) {
+      case 'pure':      dur = 0.9 + 4.1 * outer; break;
+      case 'bell':      dur = 0.6 + 3.4 * outer; break;
+      case 'organ':     dur = 0.4 + 1.6 * outer; break;
+      case 'reedsynth': dur = 1 + 4 * outer; break;
+      default:          dur = 0.7 + 3.3 * outer;  // pluck
+    }
+    return dur * (this.spec.synth.durScale || 1);
+  }
+
+  // Dot brightness for plugin variations, 0..1. frac = phase since the strike
+  // (0..1 of the dot's period), period in seconds, voiceJ = voice index.
+  // 'classic' reproduces vars 0-22: visible for the first 10% of the
+  // revolution, alpha decaying x0.95/frame at 24 fps (stateless equivalent).
+  // 'noteDur' fades linearly over the note's audible length.
+  dhBrightness(frac, period, voiceJ) {
+    const tSince = frac * period;
+    if (this.spec.plugin.fade === 'noteDur') {
+      return Math.max(0, 1 - tSince / this.noteDur(voiceJ));
+    }
+    return frac < 0.1 ? Math.pow(0.95, tSince * 24) : 0;
+  }
+
+  envelope(env, when, peak, dur) {
+    env.gain.setValueAtTime(0, when);
+    env.gain.linearRampToValueAtTime(peak, when + 0.006);
+    env.gain.exponentialRampToValueAtTime(0.001, when + dur);
+  }
+
+  voicePure(env, freq, when, vel, dur) {
+    const ctx = this.ctxAudio;
+    const osc = ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    osc.connect(env);
+    // mellow: soft attack (no click) and gentle treble taper so high
+    // harmonics don't pierce
+    const peak = vel * (2500 / (2500 + freq));
+    env.gain.setValueAtTime(0, when);
+    env.gain.linearRampToValueAtTime(peak, when + 0.03);
+    env.gain.exponentialRampToValueAtTime(0.001, when + dur);
+    osc.start(when); osc.stop(when + dur + 0.05);
+  }
+
+  voicePluck(env, freq, when, vel, dur) {
+    const ctx = this.ctxAudio;
+    const osc = ctx.createOscillator();
+    osc.type = 'sawtooth';
+    osc.frequency.value = freq;
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.Q.value = 1;
+    lp.frequency.setValueAtTime(Math.min(freq * 6, 12000), when);
+    lp.frequency.exponentialRampToValueAtTime(Math.max(freq, 200), when + dur);
+    osc.connect(lp); lp.connect(env);
+    this.envelope(env, when, vel * 0.8, dur);
+    osc.start(when); osc.stop(when + dur + 0.05);
+  }
+
+  voiceBell(env, freq, when, vel, dur) {
+    const ctx = this.ctxAudio;
+    // fundamental + inharmonic partial, both decaying — a simple bell
+    for (const [mult, amp, d] of [[1, 1, dur], [2.756, 0.4, dur * 0.6], [5.404, 0.15, dur * 0.3]]) {
+      if (freq * mult > 11000) continue;  // keep partials well below Nyquist
+      const osc = ctx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.value = freq * mult;
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0, when);
+      g.gain.linearRampToValueAtTime(vel * amp * 0.6, when + 0.004);
+      g.gain.exponentialRampToValueAtTime(0.001, when + d);
+      osc.connect(g); g.connect(env);
+      osc.start(when); osc.stop(when + d + 0.05);
+    }
+    env.gain.value = 1;  // per-partial envelopes above; bypass the shared one
+  }
+
+  voiceOrgan(env, freq, when, vel, dur) {
+    const ctx = this.ctxAudio;
+    // pipe-ish additive tone: fundamental + octave + a whisper of the twelfth
+    for (const [mult, amp] of [[1, 1], [2, 0.35], [3, 0.12]]) {
+      if (freq * mult > 11000) continue;
+      const osc = ctx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.value = freq * mult;
+      const g = ctx.createGain();
+      g.gain.value = amp;
+      osc.connect(g); g.connect(env);
+      osc.start(when); osc.stop(when + dur + 0.1);
+    }
+    // soft chiff attack, sustained body, quick release
+    env.gain.setValueAtTime(0, when);
+    env.gain.linearRampToValueAtTime(vel * 0.7, when + 0.03);
+    env.gain.setValueAtTime(vel * 0.7, when + dur * 0.8);
+    env.gain.linearRampToValueAtTime(0, when + dur);
+  }
+
+  voicePad(env, freq, when, vel, period) {
+    const ctx = this.ctxAudio;
+    // slow swell used by the drone variation: rises into the side crossing
+    // and falls away, overlapping the next swell for a continuous drone
+    const dur = Math.min(Math.max(period * 0.9, 1.2), 6);
+    const attack = dur * 0.45;
+    // swell starts before the crossing so it peaks AT the crossing
+    const t0 = Math.max(ctx.currentTime, when - attack);
+    for (const [mult, amp] of [[1, 1], [2, 0.2]]) {
+      if (freq * mult > 11000) continue;
+      const osc = ctx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.value = freq * mult;
+      const g = ctx.createGain();
+      g.gain.value = amp;
+      osc.connect(g); g.connect(env);
+      osc.start(t0); osc.stop(when + dur);
+    }
+    env.gain.setValueAtTime(0, t0);
+    env.gain.linearRampToValueAtTime(vel * 0.5, when);
+    env.gain.linearRampToValueAtTime(0, when + dur * 0.55);
+  }
+
+  voiceReedSynth(env, freq, when, vel, dur) {
+    const ctx = this.ctxAudio;
+    // harmonium-ish reed: two slightly detuned saws through a lowpass,
+    // durations mirroring the original samples (1s inner .. 5s outer)
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = Math.min(freq * 5, 8000);
+    lp.Q.value = 1.5;
+    lp.connect(env);
+    for (const detune of [0, 6]) {
+      const osc = ctx.createOscillator();
+      osc.type = 'sawtooth';
+      osc.frequency.value = freq;
+      osc.detune.value = detune;
+      osc.connect(lp);
+      osc.start(when); osc.stop(when + dur + 0.1);
+    }
+    env.gain.setValueAtTime(0, when);
+    env.gain.linearRampToValueAtTime(vel * 0.35, when + 0.025);
+    env.gain.exponentialRampToValueAtTime(0.001, when + dur);
+  }
+
+  voiceReed(env, freq, when, vel) {
+    const ctx = this.ctxAudio;
+    const midi = Math.round(69 + 12 * Math.log2(freq / 440));
+    // nearest available sample, pitch-shifted the remaining distance
+    const sampleMidi = Math.max(60, Math.min(84, midi));
+    const buf = this.reedBuffers && this.reedBuffers[sampleMidi];
+    if (!buf) return;
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    src.playbackRate.value = Math.pow(2, (midi - sampleMidi) / 12);
+    src.connect(env);
+    env.gain.setValueAtTime(vel + 0.3, when);
+    src.start(when);
   }
 
   // ---- lifecycle ------------------------------------------------------------
@@ -213,6 +663,13 @@ class WhitneyPlayer {
     await this.initAudio();
     if (this.ctxAudio.state === 'suspended') await this.ctxAudio.resume();
     if (this.spec.audio) this.startSoundtrack();
+    if (this.spec.synth && this.spec.mode !== 'crank') {
+      // Small pre-roll so the first grand-alignment chord isn't clipped.
+      // (The crank is event-driven — no scheduler.)
+      this.audioStartTime = this.ctxAudio.currentTime + 0.15;
+      this.schedK = new Array(this.spec.n).fill(0);
+      this.startSynthTimer();
+    }
     this.running = true;
     this.paused = false;
     this.elapsed = 0;
@@ -230,6 +687,18 @@ class WhitneyPlayer {
       this.raf = requestAnimationFrame(step);
     };
     this.raf = requestAnimationFrame(step);
+  }
+
+  // The scheduler runs on its own timer (not rAF) so hidden tabs keep playing.
+  startSynthTimer() {
+    this.stopSynthTimer();
+    this.synthTimer = setInterval(() => {
+      if (this.running && !this.paused) this.scheduleSynth();
+    }, 250);
+  }
+
+  stopSynthTimer() {
+    if (this.synthTimer) { clearInterval(this.synthTimer); this.synthTimer = null; }
   }
 
   // Suspending the AudioContext freezes ctxAudio.currentTime, so the visual
@@ -250,6 +719,7 @@ class WhitneyPlayer {
 
   stop() {
     this.running = false;
+    this.stopSynthTimer();
     if (this.raf) cancelAnimationFrame(this.raf);
     if (this.source) { try { this.source.stop(); } catch (e) {} this.source = null; }
     if (this.ctxAudio) this.ctxAudio.suspend();
@@ -266,6 +736,11 @@ class WhitneyPlayer {
     const spec = this.spec;
     if (spec.mode === 'crank') {
       this.tickCrank(dt);
+    } else if (spec.synth && this.ctxAudio) {
+      // Notes are scheduled on the audio clock; visuals follow the same clock,
+      // so a triggered note and its halo flash coincide exactly.
+      this.scheduleSynth();
+      this.elapsed = Math.max(0, this.ctxAudio.currentTime - this.audioStartTime) % spec.cycle;
     } else {
       // Drive the visual clock from the audio clock when we have one, exactly
       // like the SWF drove both from t=0 (audio looped independently).
@@ -329,6 +804,11 @@ class WhitneyPlayer {
     dc.setTransform(1, 0, 0, 1, 0, 0);
     dc.fillStyle = '#000';
     dc.fillRect(0, 0, this.W, this.H);
+
+    if (spec.mode === 'plugin') {
+      spec.plugin.draw(this, dc);
+      return;
+    }
 
     const fade = Math.pow(0.95, dt * 24); // Flash's per-frame *=0.95 at 24 fps
 
@@ -531,24 +1011,40 @@ let player = null;
 function currentVariation() {
   const m = /[?&]v=(\d+)/.exec(location.search);
   const v = m ? parseInt(m[1], 10) : 0;
-  return VARIATIONS.find(s => s.v === v) || VARIATIONS[0];
+  const spec = VARIATIONS.find(s => s.v === v) || VARIATIONS[0];
+  let useSynth = /[?&]synth=1/.test(location.search);
+  if (!spec.synth) useSynth = false;
+  // synth-only variations (the crank is sample-based, not synth-only)
+  if (!spec.audio && spec.synth && spec.mode !== 'crank') useSynth = true;
+  return {spec, useSynth};
 }
 
 function setPlayButton(label) {
   document.getElementById('playpause').textContent = label;
 }
 
-async function loadVariation(spec, autostart) {
+// The manifest entry carries both audio (mp3) and synth specs; the player gets
+// an effective spec with only the selected sound source.
+function effectiveSpec(spec, useSynth) {
+  return {...spec,
+    audio: useSynth ? null : spec.audio,
+    synth: useSynth ? spec.synth : null};
+}
+
+async function loadVariation(spec, useSynth, autostart) {
   if (player) player.destroy();
   const canvas = document.getElementById('stage');
-  player = new WhitneyPlayer(canvas, spec);
+  player = new WhitneyPlayer(canvas, effectiveSpec(spec, useSynth));
   window.whitneyPlayer = player;
 
-  const label = `whitney music box var. ${spec.v} - ${spec.title}`;
+  const kind = useSynth ? ' (synth)' : '';
+  const label = `whitney music box var. ${spec.v} - ${spec.title}${kind}`;
   document.getElementById('title').textContent = label;
   document.title = label;
-  for (const a of document.querySelectorAll('#nav a')) {
-    a.className = (parseInt(a.dataset.v, 10) === spec.v) ? 'active' : '';
+  for (const a of document.querySelectorAll('#nav a[data-v]')) {
+    a.classList.toggle('active',
+      parseInt(a.dataset.v, 10) === spec.v &&
+      (a.dataset.kind === undefined || (a.dataset.kind === 'synth') === useSynth));
   }
 
   if (autostart) {
@@ -566,26 +1062,60 @@ async function loadVariation(spec, autostart) {
   }
 }
 
+function navLink(spec, useSynth, text, kind) {
+  const a = document.createElement('a');
+  a.href = '?v=' + spec.v + (useSynth ? '&synth=1' : '');
+  a.dataset.v = spec.v;
+  if (kind) a.dataset.kind = kind;
+  a.textContent = text;
+  a.addEventListener('click', (ev) => {
+    ev.preventDefault();
+    history.pushState(null, '', a.getAttribute('href'));
+    loadVariation(spec, useSynth, true);  // click gesture unlocks audio
+  });
+  return a;
+}
+
 function buildNav() {
   const nav = document.getElementById('nav');
   nav.innerHTML = '';
+  let lastGroup;
   for (const spec of VARIATIONS) {
-    const a = document.createElement('a');
-    a.href = '?v=' + spec.v;
-    a.dataset.v = spec.v;
-    a.textContent = `var. ${spec.v} - ${spec.title}`;
-    a.addEventListener('click', (ev) => {
-      ev.preventDefault();
-      history.pushState(null, '', '?v=' + spec.v);
-      loadVariation(spec, true);   // click gesture unlocks audio: start now
-    });
-    nav.appendChild(a);
+    if (spec.group && spec.group !== lastGroup) {
+      const h = document.createElement('div');
+      h.className = 'navgroup';
+      h.textContent = spec.group;
+      nav.appendChild(h);
+      lastGroup = spec.group;
+    }
+    const row = document.createElement('div');
+    row.className = 'navrow';
+    const title = document.createElement('span');
+    title.className = 'navtitle';
+    title.textContent = `var. ${spec.v} - ${spec.title}`;
+    row.appendChild(title);
+    const picks = document.createElement('span');
+    picks.className = 'navpicks';
+    if (spec.mode === 'crank') {
+      picks.appendChild(navLink(spec, false, 'wavs', 'mp3'));
+      picks.appendChild(navLink(spec, true, 'synth', 'synth'));
+    } else {
+      if (spec.audio) {
+        picks.appendChild(navLink(spec, false, 'mp3', 'mp3'));
+      }
+      if (spec.synth) {
+        picks.appendChild(navLink(spec, true, 'synth', 'synth'));
+      }
+    }
+    row.appendChild(picks);
+    nav.appendChild(row);
   }
 }
 
 window.addEventListener('DOMContentLoaded', () => {
   buildNav();
-  loadVariation(currentVariation(), false);
+  const cur = currentVariation();
+  loadVariation(cur.spec, cur.useSynth, false);
 
   document.getElementById('playpause').addEventListener('click', async () => {
     if (!player.running) {           // fresh page or after a failed autostart
@@ -601,5 +1131,8 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-window.addEventListener('popstate', () => loadVariation(currentVariation(), true));
+window.addEventListener('popstate', () => {
+  const cur = currentVariation();
+  loadVariation(cur.spec, cur.useSynth, true);
+});
 window.addEventListener('pagehide', () => { if (player) player.destroy(); });
