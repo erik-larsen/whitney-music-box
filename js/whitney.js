@@ -94,6 +94,7 @@ const VARIATIONS = [
   // Visual treatment matches the classic variations: a gray hairline where
   // notes strike, and each voiced dot brightens for its note's duration.
   {v:23, group:'digital harmony (1980) — the book\'s programs, music-boxed', title:'column A - 60 falling columns', mode:'plugin', n:59, cycle:90,
+   blurb:'60 columns · 1:30 cycle · column k falls k times per cycle, sounding as it wraps past the top line · diagonal waves form and dissolve as columns align',
    synth:{voice:'pluck', tuning:{type:'chromatic', base:28, reverse:true}},
    plugin:{
      fade:'classic',   // or 'noteDur': dot glows for its note's audible length
@@ -128,6 +129,7 @@ const VARIATIONS = [
    // voices sit in a strong audible band: microtones across 165-930 Hz.
    // Short, present pings — at ~120 notes/s they fuse into a granular
    // stream, so congruence is "flash activity = sound activity".
+   blurb:'360 dots on a spiral · 9:00 cycle · dot k orbits k times per cycle, sounding at the gray line — ~120 notes/s fuse into a granular stream that thickens and thins with the spiral\'s windings',
    synth:{voice:'pure', tuning:{type:'microtones', fLow:165, octaves:2.5, reverse:true}, velScale:0.6, durScale:0.35},
    plugin:{
      fade:'classic',   // or 'noteDur': dot glows for its note's audible length
@@ -159,6 +161,7 @@ const VARIATIONS = [
    }},
   {v:25, group:'digital harmony (1980) — the book\'s programs, music-boxed', title:'arabesque', mode:'plugin', n:359, cycle:720,
    // every dot voiced: ~1-cent microtonal steps, quiet short plucks
+   blurb:'360 dots on sine-spaced rows · 12:00 cycle · dot k drifts across and wraps k times per cycle, sounding at the left line · the curtain shears into arcs as speeds diverge',
    synth:{voice:'pluck', tuning:{type:'microtones', fLow:220, octaves:3, reverse:true}, velScale:0.3, durScale:0.5},
    plugin:{
      fade:'classic',   // or 'noteDur': dot glows for its note's audible length
@@ -1008,6 +1011,75 @@ function decayScale(dt) { return dt * 24; } // per-frame amounts at the SWF's 24
 
 let player = null;
 
+// ---------------------------------------------------------------------------
+// Human-readable parameter readouts, generated from the manifest
+// ---------------------------------------------------------------------------
+
+function noteName(midi) {
+  const names = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+  return names[midi % 12] + (Math.floor(midi / 12) - 1);
+}
+
+function fmtCycle(s) {
+  return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+}
+
+function describeTuning(spec) {
+  const t = spec.synth.tuning, n = spec.n;
+  const inside = t.reverse ? 'lowest inside' : 'highest inside';
+  if (t.type === 'harmonics') {
+    let s = `frequency = speed × ${t.f0} Hz (the harmonic series of ${t.f0} Hz)`;
+    if (t.palindrome) s += ', rising to the middle tine then falling';
+    return s;
+  }
+  if (t.type === 'microtones') {
+    const step = Math.round(1200 * t.octaves / (n - 1));
+    return `${t.octaves} octaves split into ${n - 1} equal microtone steps (~${step} cents), ${inside}`;
+  }
+  if (t.type === 'pentatonic') {
+    return `pentatonic scale from ${noteName(t.base)}, ${inside}`;
+  }
+  return `chromatic, one semitone per tine: ${noteName(t.base)}–${noteName(t.base + n - 1)}, ${inside}`;
+}
+
+function describeMotion(spec) {
+  const base = `${spec.n} tines · ${fmtCycle(spec.cycle)} cycle`;
+  switch (spec.mode) {
+    case 'table': {
+      const t = spec.table.slice(0, spec.n);
+      const kind = spec.v === 12 ? 'prime numbers' : 'composite numbers';
+      return `${base} · tine speeds are ${kind}: ${t[t.length - 1]} revs/cycle innermost down to ${t[0]} outermost · each tine sounds as it crosses the gray line`;
+    }
+    case 'stereo':
+      return `${base} · innermost tine spins ${spec.n} revs/cycle, outermost 1 · notes fire at BOTH line crossings — right side pans right, left side pans left`;
+    case 'sweep':
+      return `${base} · dots start at 12 o'clock; they pulse and sound at the 3 and 9 o'clock crossings, panned to their side · no strike line`;
+    case 'sonar':
+      return `${base} · the green line sweeps counterclockwise while dots orbit clockwise — a dot sounds when it meets the moving line`;
+    case 'crank':
+      return `${base} · you are the motor: drag the crank (100° of crank = 1 second of box time, momentum carries it) · tines sound crossing the line in your cranking direction`;
+    default:
+      return `${base} · innermost tine spins ${spec.n} revs/cycle, outermost 1 — each sounds as it crosses the gray line · all tines realign once per cycle`;
+  }
+}
+
+function describeSound(spec, useSynth) {
+  if (spec.mode === 'crank') {
+    return useSynth
+      ? 'sound: synthesized reeds (detuned saws through a lowpass), C4–C6 lowest inside, panned across the wheel'
+      : 'sound: the original 25 reed samples embedded in the 2006 SWF (C4–C6), panned across the wheel';
+  }
+  if (!useSynth) {
+    return 'sound: the original 2006 soundtrack, extracted byte-for-byte from the SWF (11 kHz mp3), gaplessly looped';
+  }
+  return `sound: live Web Audio — ${spec.synth.voice} voice · ${describeTuning(spec)}`;
+}
+
+function describeVariation(spec, useSynth) {
+  const motion = spec.plugin && spec.blurb ? spec.blurb : describeMotion(spec);
+  return [motion, describeSound(spec, useSynth)];
+}
+
 function currentVariation() {
   const m = /[?&]v=(\d+)/.exec(location.search);
   const v = m ? parseInt(m[1], 10) : 0;
@@ -1041,6 +1113,8 @@ async function loadVariation(spec, useSynth, autostart) {
   const label = `whitney music box var. ${spec.v} - ${spec.title}${kind}`;
   document.getElementById('title').textContent = label;
   document.title = label;
+  document.getElementById('info').innerHTML =
+    describeVariation(spec, useSynth).map(l => `<div>${l}</div>`).join('');
   for (const a of document.querySelectorAll('#nav a[data-v]')) {
     a.classList.toggle('active',
       parseInt(a.dataset.v, 10) === spec.v &&
@@ -1068,6 +1142,7 @@ function navLink(spec, useSynth, text, kind) {
   a.dataset.v = spec.v;
   if (kind) a.dataset.kind = kind;
   a.textContent = text;
+  a.title = describeVariation(spec, useSynth).join('\n');
   a.addEventListener('click', (ev) => {
     ev.preventDefault();
     history.pushState(null, '', a.getAttribute('href'));
