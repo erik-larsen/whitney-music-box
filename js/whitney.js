@@ -30,6 +30,14 @@ const NONPRIMES = [
   40,42,44,45,46,48,49,50,51,52,54,55,56,57,58,60,62,63,64,65,66,68,69,70,72,
   74,75,76,77,78,80,81,82,84,85,86,87,88,90,91,92,93,94,95,96,98,99,100,102];
 
+// Just-intonation C hirajōshi (C D Eb G Ab): 1/1, 9/8, 6/5, 3/2, 8/5. Over two
+// octaves and scaled by 40, the ratios become the smallest whole-number swing
+// counts — and whole numbers are what make exact realignment possible. (The
+// viral "Hirajoshi Wave" video claimed equal-tempered pendulums realigning,
+// which the equal-tempered scale's irrational ratios rule out.)
+const HIRAJOSHI_RATIOS = [1, 9/8, 6/5, 3/2, 8/5];
+const HIRAJOSHI_SWINGS = [40, 45, 48, 60, 64, 80, 90, 96, 120, 128];
+
 // Every original variation carries both its extracted soundtrack (audio) and a
 // live-synth counterpart (synth) — the page offers them side by side. Voices
 // and tunings are chosen to echo each variation's original character.
@@ -192,6 +200,67 @@ const VARIATIONS = [
      // k0=0 opens with the grand-alignment chord like the classic variations
      events(p, j) {
        return {period: p.spec.cycle / (j + 1), offsets: [{frac: 0, pan: null}], k0: 0};
+     },
+   }},
+
+  // --- the viral "hirajoshi wave", made real --------------------------------
+  // An AI-generated video that went around X in 2026 showed spheres on a V of
+  // strings, captioned as pendulums swinging "at the exact frequency" of the
+  // C hirajōshi scale, drifting into chaos and "perfectly realigning". As
+  // described it is impossible twice over: audible frequencies are hundreds
+  // of swings per second, and equal temperament's irrational ratios never
+  // realign. This is the honest version: swing rates in just-intonation
+  // hirajōshi ratios (whole-number swing counts per cycle, HIRAJOSHI_SWINGS),
+  // notes at the same ratios from middle C, and string lengths following the
+  // real pendulum law L ∝ 1/f². The upward V is kept as the one theatrical
+  // flourish — everything that moves or sounds is exact.
+  {v:26, group:'homage — the viral "hirajoshi wave", made real', title:'the hirajoshi wave', mode:'plugin', n:10, cycle:180,
+   blurb:'10 pendulums on one vertex · 3:00 cycle · swing counts are just-intonation C hirajōshi ratios — 40:45:48:60:64 and the octave above — so the chaos genuinely realigns once per cycle · string lengths follow the pendulum law L ∝ 1/f² · each sounds crossing the vertical',
+   synth:{voice:'pluck', tuning:{type:'just', f0:261.63, ratios:HIRAJOSHI_RATIOS, reverse:true,
+     label:'just-intonation C hirajōshi from middle C (ratios 1/1, 9/8, 6/5, 3/2, 8/5) over two octaves — slowest pendulum = lowest note'}},
+   plugin:{
+     fade:'classic',
+     draw(p, dc) {
+       const cycle = p.spec.cycle, t = p.elapsed;
+       const vx = 250, vy = 462;             // string vertex, bottom center
+       const wall = 42 * DEG, ampl = 36 * DEG, wallLen = 600;
+       const n = HIRAJOSHI_SWINGS.length, kMin = HIRAJOSHI_SWINGS[0];
+       // strike line: pendulums sound crossing the vertical
+       dc.strokeStyle = '#555555'; dc.lineWidth = 1;
+       dc.beginPath();
+       dc.moveTo(vx + 0.5, vy); dc.lineTo(vx + 0.5, vy - 445);
+       dc.stroke();
+       // the V
+       dc.strokeStyle = '#E0E0E0'; dc.lineWidth = 3; dc.lineCap = 'round';
+       dc.beginPath();
+       dc.moveTo(vx, vy);
+       dc.lineTo(vx - Math.sin(wall) * wallLen, vy - Math.cos(wall) * wallLen);
+       dc.moveTo(vx, vy);
+       dc.lineTo(vx + Math.sin(wall) * wallLen, vy - Math.cos(wall) * wallLen);
+       dc.stroke();
+       for (let j = 0; j < n; j++) {
+         const k = HIRAJOSHI_SWINGS[j];
+         const L = 400 * Math.pow(kMin / k, 2);
+         const phase = (t * k / cycle) % 1;
+         const th = ampl * Math.sin(2 * Math.PI * phase);
+         const x = vx + L * Math.sin(th), y = vy - L * Math.cos(th);
+         // strikes at phase 0 and 0.5 (center crossings, one per direction)
+         const b = p.dhBrightness(phase % 0.5, cycle / k, j);
+         const u = (n - 1 - j) / n;
+         dc.strokeStyle = cssColor(getColor(u), 0.55); dc.lineWidth = 1;
+         dc.beginPath(); dc.moveTo(vx, vy); dc.lineTo(x, y); dc.stroke();
+         dc.fillStyle = lerpWhite(getColor(u), b);
+         dc.beginPath();
+         dc.arc(x, y, 4 + 8 * u + 2 * b, 0, 2 * Math.PI);
+         dc.fill();
+       }
+     },
+     // voice j swings HIRAJOSHI_SWINGS[j] times per cycle, sounding at both
+     // center crossings, panned by swing direction; k0=0 opens with the
+     // grand-alignment chord
+     events(p, j) {
+       return {period: p.spec.cycle / HIRAJOSHI_SWINGS[j],
+               offsets: [{frac: 0, pan: 0.5}, {frac: 0.5, pan: -0.5}], k0: 0};
      },
    }},
 ];
@@ -406,6 +475,11 @@ class WhitneyPlayer {
     if (t.type === 'harmonics') return t.f0 * (idx + 1);
     if (t.type === 'microtones') {
       return t.fLow * Math.pow(2, t.octaves * idx / (n - 1));
+    }
+    if (t.type === 'just') {
+      // just-intonation ratios from f0, repeating at the octave
+      const m = t.ratios.length;
+      return t.f0 * t.ratios[idx % m] * Math.pow(2, Math.floor(idx / m));
     }
     let midi;
     if (t.type === 'pentatonic') {
@@ -1026,6 +1100,7 @@ function fmtCycle(s) {
 
 function describeTuning(spec) {
   const t = spec.synth.tuning, n = spec.n;
+  if (t.label) return t.label;
   const inside = t.reverse ? 'lowest inside' : 'highest inside';
   if (t.type === 'harmonics') {
     let s = `frequency = speed × ${t.f0} Hz (the harmonic series of ${t.f0} Hz)`;

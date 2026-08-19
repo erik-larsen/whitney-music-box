@@ -67,6 +67,7 @@ and disassemble the ActionScript are in `tools/`.
 | 23 | [column A - 60 falling columns](https://erik-larsen.github.io/whitney-music-box/?v=23) | — | 59 voices | 90s | Digital Harmony (1980), synth only |
 | 24 | [column BC - the music box's ancestor](https://erik-larsen.github.io/whitney-music-box/?v=24) | — | 359 voices | 540s | Digital Harmony (1980), granular microtone stream |
 | 25 | [arabesque](https://erik-larsen.github.io/whitney-music-box/?v=25) | — | 359 voices | 720s | Digital Harmony (1980), microtone plucks |
+| 26 | [the hirajoshi wave](https://erik-larsen.github.io/whitney-music-box/?v=26) | — | 10 | 180s | homage (2026), just-intonation pendulums |
 
 **What the modes mean** (the site shows a live parameter readout under each
 variation's player, and hovering the mp3/synth links previews it):
@@ -117,6 +118,21 @@ all 59 moving columns chromatically; column BC and arabesque voice all 359
 moving dots as quiet microtonal streams — at ~120 notes/s the individual
 pings fuse into a granular wash that thickens and thins with the pattern's
 alignments.
+
+## The hirajoshi wave (2026)
+
+Variation 26 is an honest reconstruction of "The Hirajoshi Wave", an
+AI-generated video that circulated on X in 2026: spheres on a V of strings,
+captioned as pendulums swinging "at the exact frequency" of the equal-tempered
+C hirajōshi scale before "perfectly realigning". As described, that is
+impossible twice over — audible pitches are hundreds of swings per second, and
+equal temperament's irrational frequency ratios never realign. This version
+keeps the image's upward V as a theatrical flourish but makes everything that
+moves or sounds exact: the ten pendulums swing at **just-intonation** hirajōshi
+ratios (1/1, 9/8, 6/5, 3/2, 8/5 — whole-number swing counts 40:45:48:60:64 per
+cycle, ×2 for the octave above), so the drift into chaos really does realign
+once per 3-minute cycle; the notes are the same ratios from middle C; and the
+string lengths follow the real pendulum law **L ∝ 1/f²**.
 
 Variations 21+ are new, synth-only additions with no 2006 counterpart
 (pentatonic bells, and a reed organ voiced by the 25 samples extracted from
