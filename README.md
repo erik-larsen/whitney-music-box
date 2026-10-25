@@ -1,4 +1,4 @@
-# Whitney Music Box — [HTML5 resurrection](https://erik-larsen.github.io/whitney-music-box/)
+# [Whitney Music Box](https://erik-larsen.github.io/whitney-music-box/)
 
 <p align="center"><img src="media/screenshot.png" width="400" alt="Whitney Music Box var. 0 — chromatic, 48 tines"></p>
 
